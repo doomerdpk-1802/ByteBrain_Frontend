@@ -6,12 +6,10 @@ interface GenericInputProps {
   reference?: Ref<HTMLInputElement>;
 }
 
-export function GenericInput(props: GenericInputProps) {
+export default function GenericInput(props: GenericInputProps) {
   return (
-    <div className="flex gap-2 mb-4 items-center">
-      {props.label && (
-        <label className="mb-1 text-gray-700 font-medium">{props.label}</label>
-      )}
+    <div className="flex w-full items-center justify-between mb-4 gap-2">
+      <label className="mb-1 text-gray-700 font-medium">{props.label}</label>
       <input
         ref={props.reference}
         placeholder={props.placeholder}

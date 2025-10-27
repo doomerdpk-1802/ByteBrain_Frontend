@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SidebarItem } from "./SidebarItem";
 import ArticleIcon from "../Icons/articleIcon";
 import ImageIcon from "../Icons/ImageIcon";
@@ -29,6 +29,20 @@ export function Sidebar() {
     },
     { icon: <XIcon />, text: "Tweets", onClick: () => console.log("Tweets") },
   ];
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setIsOpen(false);
+      } else {
+        setIsOpen(true);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div className="flex h-screen bg-gray-50">

@@ -1,3 +1,11 @@
+import { TopBar } from "../Components/TopBar";
+import { Hero } from "../Components/Hero";
+
 export default function Home() {
-  return <div>Home Page</div>;
+  return (
+    <div>
+      <TopBar />
+      <Hero />
+    </div>
+  );
 }

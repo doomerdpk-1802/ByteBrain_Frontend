@@ -1,11 +1,11 @@
 import type React from "react";
 import { ExternalLink } from "lucide-react";
+import ShareIcon from "../Icons/ShareIcon";
+import DeleteIcon from "../Icons/deleteIcon";
 
 interface CardComponentProps {
   title: string;
   titleIcon: React.ReactNode;
-  shareIcon: React.ReactNode;
-  deleteIcon: React.ReactNode;
   linkUrl: string;
   linkText: string;
   tags: string[];
@@ -14,8 +14,6 @@ interface CardComponentProps {
 export function CardComponent({
   title,
   titleIcon,
-  shareIcon,
-  deleteIcon,
   linkUrl,
   linkText,
   tags,
@@ -33,10 +31,10 @@ export function CardComponent({
         {/* Action icons */}
         <div className="flex gap-3">
           <span className="p-2 rounded-md bg-gray-200 hover:bg-blue-100 transition-colors cursor-pointer">
-            {shareIcon}
+            <ShareIcon />
           </span>
           <span className="p-2 rounded-md bg-gray-200 hover:bg-red-100 transition-colors cursor-pointer">
-            {deleteIcon}
+            <DeleteIcon />
           </span>
         </div>
       </div>
