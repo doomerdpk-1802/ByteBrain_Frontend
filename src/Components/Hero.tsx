@@ -1,6 +1,8 @@
 import { GenericButton } from "./Button";
+import { useNavigate } from "react-router-dom";
 
 export function Hero() {
+  const navigate = useNavigate();
   return (
     <section className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 bg-gray-50">
       <div className="max-w-4xl mx-auto text-center">
@@ -16,7 +18,13 @@ export function Hero() {
         </p>
 
         <div className="flex justify-center">
-          <GenericButton onClick={() => {}}>Get Started</GenericButton>
+          <GenericButton
+            onClick={() => {
+              navigate("/signup");
+            }}
+          >
+            Get Started
+          </GenericButton>
         </div>
       </div>
     </section>

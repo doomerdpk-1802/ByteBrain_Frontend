@@ -1,25 +1,21 @@
-import ContentModal from "../Components/ContentModal";
+import Form from "../Components/Form";
 import GenericInput from "../Components/Input";
 import { GenericButton } from "../Components/Button";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function Signin() {
-  const [isOpen, setIsOpen] = useState(true);
+export default function Signup() {
+  const navigate = useNavigate();
   return (
-    <ContentModal
-      title="Enter Your Details"
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
-    >
+    <Form title="Enter Your Details to Login">
       <GenericInput label="Email " placeholder="Provide your email...." />
       <GenericInput label="Password" placeholder="Provide a password...." />
       <GenericButton
         onClick={() => {
-          setIsOpen(true);
+          navigate("/dashboard");
         }}
       >
         Submit
       </GenericButton>
-    </ContentModal>
+    </Form>
   );
 }

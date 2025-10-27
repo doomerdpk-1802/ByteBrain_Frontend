@@ -5,9 +5,11 @@ import ImageIcon from "../Icons/ImageIcon";
 import { useState } from "react";
 import ContentModal from "../Components/ContentModal";
 import GenericInput from "../Components/Input";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
   return (
     <div className="flex">
       <div>
@@ -24,7 +26,13 @@ export default function Dashboard() {
             >
               Add Content
             </GenericButton>
-            <GenericButton onClick={() => {}}>Logout</GenericButton>
+            <GenericButton
+              onClick={() => {
+                navigate("/");
+              }}
+            >
+              Logout
+            </GenericButton>
           </div>
         </div>
         <div className="flex flex-1 flex-wrap p-9 gap-8">
@@ -47,7 +55,13 @@ export default function Dashboard() {
         <GenericInput label="Type" placeholder="Provide the Type...." />
         <GenericInput label="Title" placeholder="Provide the Title...." />
         <GenericInput label="Tags" placeholder="Provide the Tags...." />
-        <GenericButton onClick={() => {}}>Submit</GenericButton>
+        <GenericButton
+          onClick={() => {
+            setIsOpen(false);
+          }}
+        >
+          Submit
+        </GenericButton>
       </ContentModal>
     </div>
   );

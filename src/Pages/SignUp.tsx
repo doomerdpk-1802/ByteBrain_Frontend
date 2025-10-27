@@ -1,16 +1,12 @@
-import ContentModal from "../Components/ContentModal";
+import Form from "../Components/Form";
 import GenericInput from "../Components/Input";
 import { GenericButton } from "../Components/Button";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
-  const [isOpen, setIsOpen] = useState(true);
+  const navigate = useNavigate();
   return (
-    <ContentModal
-      title="Enter Your Details"
-      isOpen={isOpen}
-      setIsOpen={setIsOpen}
-    >
+    <Form title="Enter Your Details to Signup">
       <GenericInput
         label="First Name"
         placeholder="Provide your first name...."
@@ -23,11 +19,11 @@ export default function Signup() {
       <GenericInput label="Password" placeholder="Provide a password...." />
       <GenericButton
         onClick={() => {
-          setIsOpen(true);
+          navigate("/login");
         }}
       >
         Submit
       </GenericButton>
-    </ContentModal>
+    </Form>
   );
 }
