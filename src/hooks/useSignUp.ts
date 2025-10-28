@@ -5,7 +5,7 @@ export const useSignUp = () => {
   return useMutation({
     mutationFn: async (newUser: {
       firstName: string;
-      lastName: string;
+      lastName?: string;
       email: string;
       password: string;
     }) => {

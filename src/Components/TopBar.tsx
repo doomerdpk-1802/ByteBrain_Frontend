@@ -11,7 +11,7 @@ export function TopBar() {
           <BrainIcon />
         </div>
 
-        <div className="flex items-center gap-4 sm:gap-8">
+        <div className="flex items-center gap-4 sm:gap-8 p-2">
           <GenericButton
             onClick={() => {
               navigate("/login");

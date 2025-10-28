@@ -3,7 +3,7 @@ import { api } from "../lib/api";
 
 export const useUpdateContent = () => {
   return useMutation({
-    mutationFn: async (newContent: {
+    mutationFn: async (Content: {
       contentId: string;
       link: string;
       type: string;
@@ -12,7 +12,7 @@ export const useUpdateContent = () => {
     }) => {
       const token = localStorage.getItem("token");
 
-      const { data } = await api.put("/update-content", newContent, {
+      const { data } = await api.put("/update-content", Content, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

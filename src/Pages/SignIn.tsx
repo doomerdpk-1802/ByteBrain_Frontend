@@ -1,21 +1,82 @@
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useLogin } from "../hooks/useLogin";
 import Form from "../Components/Form";
 import GenericInput from "../Components/Input";
 import { GenericButton } from "../Components/Button";
-import { useNavigate } from "react-router-dom";
+import Alert from "../Components/Alert";
 
-export default function Signup() {
+type LoginFormData = {
+  email: string;
+  password: string;
+};
+
+export default function Login() {
   const navigate = useNavigate();
+  const { mutate, isPending } = useLogin();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({ mode: "onTouched" });
+
+  const onSubmit = (data: LoginFormData) => {
+    mutate(data, {
+      onSuccess: () => {
+        alert("Signin successful!");
+        navigate("/dashboard");
+      },
+      onError: (error: any) => {
+        const errorMsg =
+          error.response?.data?.error ||
+          error.response?.data?.message ||
+          "Something went wrong. Please try again later.";
+
+        alert(errorMsg);
+      },
+    });
+  };
+
   return (
-    <Form title="Enter Your Details to Login">
-      <GenericInput label="Email " placeholder="Provide your email...." />
-      <GenericInput label="Password" placeholder="Provide a password...." />
-      <GenericButton
-        onClick={() => {
-          navigate("/dashboard");
-        }}
+    <Form title="Enter your details to Login">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col gap-4 w-full max-w-md mx-auto"
       >
-        Submit
-      </GenericButton>
+        <GenericInput
+          name="email"
+          type="email"
+          label="Email"
+          placeholder="Provide your email..."
+          register={register("email", {
+            required: "Email is required!",
+          })}
+        />
+
+        <GenericInput
+          name="password"
+          type="password"
+          label="Password"
+          placeholder="Provide a password..."
+          register={register("password", {
+            required: "Password is Required!",
+          })}
+        />
+
+        {Object.keys(errors).length > 0 && (
+          <Alert>
+            <ul className="list-disc list-inside space-y-1 text-red-500 text-sm">
+              {errors.email && <li>{errors.email.message}</li>}
+              {errors.password && <li>{errors.password.message}</li>}
+            </ul>
+          </Alert>
+        )}
+
+        <GenericButton type="submit" disabled={isPending}>
+          {isPending ? "Logging in..." : "Login"}
+        </GenericButton>
+      </form>
     </Form>
   );
 }
