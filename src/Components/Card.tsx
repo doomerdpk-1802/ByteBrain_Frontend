@@ -2,6 +2,7 @@ import type React from "react";
 import { ExternalLink } from "lucide-react";
 import ShareIcon from "../Icons/ShareIcon";
 import DeleteIcon from "../Icons/deleteIcon";
+import EditIcon from "../Icons/EditIcon";
 
 interface CardComponentProps {
   title: string;
@@ -19,7 +20,7 @@ export function CardComponent({
   tags,
 }: CardComponentProps) {
   return (
-    <div className="w-full max-w-sm border rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+    <div className="w-full max-w-sm border rounded-lg p-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
       {/* Header with title and action icons */}
       <div className="flex justify-between gap-4 mb-6">
         {/* Title with icon */}
@@ -33,6 +34,9 @@ export function CardComponent({
           <span className="p-2 rounded-md bg-gray-200 hover:bg-blue-100 transition-colors cursor-pointer">
             <ShareIcon />
           </span>
+          <span className="p-2 rounded-md bg-gray-200 hover:bg-blue-100 transition-colors cursor-pointer">
+            <EditIcon />
+          </span>
           <span className="p-2 rounded-md bg-gray-200 hover:bg-red-100 transition-colors cursor-pointer">
             <DeleteIcon />
           </span>
@@ -40,7 +44,7 @@ export function CardComponent({
       </div>
 
       {/* Link embedding */}
-      <div className="mb-6 pb-10 flex justify-center">
+      <div className="mb-6 pb-10 pt-6 flex justify-center">
         <a
           href={linkUrl}
           target="_blank"

@@ -5,11 +5,7 @@ import Form from "../Components/Form";
 import GenericInput from "../Components/Input";
 import { GenericButton } from "../Components/Button";
 import Alert from "../Components/Alert";
-
-type LoginFormData = {
-  email: string;
-  password: string;
-};
+import type { LoginFormData, LoginResponse } from "../hooks/useLogin";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -23,8 +19,9 @@ export default function Login() {
 
   const onSubmit = (data: LoginFormData) => {
     mutate(data, {
-      onSuccess: () => {
+      onSuccess: (response: LoginResponse) => {
         alert("Signin successful!");
+        localStorage.setItem("token", response.token);
         navigate("/dashboard");
       },
       onError: (error: any) => {

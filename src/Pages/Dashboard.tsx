@@ -12,20 +12,29 @@ import ImageIcon from "../Icons/ImageIcon";
 import YoutubeIcon from "../Icons/YoutubeIcon";
 import XIcon from "../Icons/XIcon";
 import ArticleIcon from "../Icons/articleIcon";
+import Alert from "../Components/Alert";
 
-type FormData = {
+interface FormData {
   link: string;
-  type: string;
   title: string;
   tags: string;
-};
+  type: string;
+  linkText: string;
+}
 
 export default function Dashboard() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  const { register, handleSubmit, reset } = useForm<FormData>();
   const { mutate, isPending } = useContent();
   const { data: contents, refetch } = useContents();
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm<FormData>({ mode: "onTouched" });
 
   const onSubmit = (data: FormData) => {
     mutate(data, {
@@ -36,13 +45,20 @@ export default function Dashboard() {
         refetch();
       },
       onError: (error: any) => {
-        alert(
-          error?.response?.data?.error ||
-            "Error creating content! Please try again."
-        );
+        const errorMsg =
+          error.response?.data?.error ||
+          error.response?.data?.message ||
+          "Something went wrong. Please try again later.";
+
+        alert(errorMsg);
       },
     });
   };
+
+  if (!localStorage.getItem("token")) {
+    navigate("/login");
+    return;
+  }
 
   return (
     <div className="flex">
@@ -57,7 +73,14 @@ export default function Dashboard() {
             <GenericButton onClick={() => setIsOpen(true)}>
               Add Content
             </GenericButton>
-            <GenericButton onClick={() => navigate("/")}>Logout</GenericButton>
+            <GenericButton
+              onClick={() => {
+                localStorage.removeItem("token");
+                navigate("/");
+              }}
+            >
+              Logout
+            </GenericButton>
           </div>
         </div>
 
@@ -67,10 +90,20 @@ export default function Dashboard() {
               <CardComponent
                 key={item._id}
                 title={item.title}
-                titleIcon={<ImageIcon />}
+                titleIcon={
+                  item.type === "image" ? (
+                    <ImageIcon />
+                  ) : item.type === "video" ? (
+                    <YoutubeIcon />
+                  ) : item.type === "article" ? (
+                    <ArticleIcon />
+                  ) : item.type === "tweet" ? (
+                    <XIcon />
+                  ) : null
+                }
                 linkUrl={item.link}
-                linkText={item.type}
-                tags={item.tags.map((t: any) => t.title)}
+                linkText={item.linkText}
+                tags={item.tags}
               />
             ))
           ) : (
@@ -90,34 +123,83 @@ export default function Dashboard() {
         >
           <GenericInput
             name="link"
-            type="text"
+            type="url"
             label="Link"
             placeholder="Provide the Link..."
-            register={register}
+            register={register("link", {
+              required: "Link is required and should be a valid url!",
+              pattern: {
+                value: /^(https?:\/\/)?([\w\d-]+\.){1,}[a-zA-Z]{2,}(\/.*)?$/,
+                message: "Please enter a valid URL (e.g. https://example.com)",
+              },
+            })}
           />
+
           <GenericInput
-            name="type"
+            name="linkText"
             type="text"
-            label="Type"
-            placeholder="Provide the Type..."
-            register={register}
+            label="Link Text"
+            placeholder="Provide the Link Text..."
+            register={register("linkText", {
+              required:
+                "Link Text is required and can have max. 100 characters!",
+              maxLength: {
+                value: 100,
+                message: "Max 100 characters allowed",
+              },
+            })}
           />
+
           <GenericInput
             name="title"
             type="text"
             label="Title"
             placeholder="Provide the Title..."
-            register={register}
+            register={register("title", {
+              required: "Title is required and can have max. 20 characters!",
+              maxLength: {
+                value: 20,
+                message: "Max 20 characters allowed",
+              },
+            })}
           />
           <GenericInput
             name="tags"
             type="text"
             label="Tags"
-            placeholder="Comma separated tags (e.g. react,js,frontend)"
-            register={register}
+            placeholder="Comma separated tags"
+            register={register("tags", {
+              required:
+                "Tags must be comma separated and individually can have maximum 20 characters!",
+            })}
           />
+          <div className="flex gap-2">
+            <GenericButton onClick={() => setValue("type", "image")}>
+              Image
+            </GenericButton>
+            <GenericButton onClick={() => setValue("type", "video")}>
+              Video
+            </GenericButton>
+            <GenericButton onClick={() => setValue("type", "article")}>
+              Article
+            </GenericButton>
+            <GenericButton onClick={() => setValue("type", "tweet")}>
+              Tweet
+            </GenericButton>
+          </div>
 
-          <GenericButton disabled={isPending}>
+          {Object.keys(errors).length > 0 && (
+            <Alert>
+              <ul className="list-disc list-inside space-y-1 text-red-500 text-sm">
+                {errors.link && <li>{errors.link.message}</li>}
+                {errors.linkText && <li>{errors.linkText.message}</li>}
+                {errors.title && <li>{errors.title.message}</li>}
+                {errors.tags && <li>{errors.tags.message}</li>}
+              </ul>
+            </Alert>
+          )}
+
+          <GenericButton type="submit" disabled={isPending}>
             {isPending ? "Submitting..." : "Submit"}
           </GenericButton>
         </form>

@@ -13,8 +13,8 @@ export const useContents = () => {
           "Content-Type": "application/json",
         },
       });
-
-      return data;
+      console.log(data);
+      return data.message;
     },
   });
 };
