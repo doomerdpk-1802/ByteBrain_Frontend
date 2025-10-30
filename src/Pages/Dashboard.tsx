@@ -1,13 +1,14 @@
 import { Sidebar } from "../Components/SideBar";
 import { GenericButton } from "../Components/Button";
 import { CardComponent } from "../Components/Card";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ContentModal from "../Components/ContentModal";
 import GenericInput from "../Components/Input";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useContent } from "../hooks/useContent";
 import { useContents } from "../hooks/useContents";
+import { useMe } from "../hooks/useMe";
 import ImageIcon from "../Icons/ImageIcon";
 import YoutubeIcon from "../Icons/YoutubeIcon";
 import XIcon from "../Icons/XIcon";
@@ -26,7 +27,30 @@ export default function Dashboard() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const { mutate, isPending } = useContent();
-  const { data: contents, refetch } = useContents();
+
+  const {
+    data: contents,
+    error: contentsError,
+    isError: isContentsError,
+    refetch,
+  } = useContents();
+  const { data: me, error: meError, isError: isMeError } = useMe();
+
+  useEffect(() => {
+    if (isContentsError && contentsError) {
+      const msg =
+        (contentsError as any)?.response?.data?.error ||
+        "Something went wrong while fetching contents.";
+      alert(msg);
+    }
+
+    if (isMeError && meError) {
+      const msg =
+        (meError as any)?.response?.data?.error ||
+        "Something went wrong while fetching user details.";
+      alert(msg);
+    }
+  }, [isContentsError, contentsError, isMeError, meError]);
 
   const {
     register,
@@ -47,7 +71,6 @@ export default function Dashboard() {
       onError: (error: any) => {
         const errorMsg =
           error.response?.data?.error ||
-          error.response?.data?.message ||
           "Something went wrong. Please try again later.";
 
         alert(errorMsg);
@@ -69,7 +92,10 @@ export default function Dashboard() {
       <div className="flex-1">
         <div className="flex justify-between items-center w-full p-9">
           <h1 className="text-3xl font-bold">All Items</h1>
-          <div className="flex gap-4">
+          <div className="flex gap-6 items-center">
+            <span>
+              <b>{me}</b>
+            </span>
             <GenericButton onClick={() => setIsOpen(true)}>
               Add Content
             </GenericButton>

@@ -5,16 +5,10 @@ export const useMe = () => {
   return useQuery({
     queryKey: ["me"],
     queryFn: async () => {
-      const token = localStorage.getItem("token");
+      const { data } = await api.get("/me");
 
-      const { data } = await api.get("/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      return data;
+      console.log(data);
+      return data.message;
     },
   });
 };
