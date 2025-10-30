@@ -10,14 +10,7 @@ export const useContent = () => {
       linkText: string;
       type: string;
     }) => {
-      const token = localStorage.getItem("token");
-
-      const { data } = await api.post("/content", newContent, {
-        headers: {
-          authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const { data } = await api.post("/content", newContent);
 
       return data;
     },

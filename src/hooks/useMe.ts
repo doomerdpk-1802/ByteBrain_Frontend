@@ -7,7 +7,6 @@ export const useMe = () => {
     queryFn: async () => {
       const { data } = await api.get("/me");
 
-      console.log(data);
       return data.message;
     },
   });

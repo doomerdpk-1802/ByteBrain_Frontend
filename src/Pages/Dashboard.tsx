@@ -14,6 +14,7 @@ import YoutubeIcon from "../Icons/YoutubeIcon";
 import XIcon from "../Icons/XIcon";
 import ArticleIcon from "../Icons/articleIcon";
 import Alert from "../Components/Alert";
+import { useUpdateContent } from "../hooks/useUpdateContent";
 
 interface FormData {
   link: string;
@@ -25,8 +26,10 @@ interface FormData {
 
 export default function Dashboard() {
   const [isOpen, setIsOpen] = useState(false);
+  const [editContent, setEditContent] = useState<any | null>(null);
   const navigate = useNavigate();
   const { mutate, isPending } = useContent();
+  const { mutate: updateContent, isPending: isUpdating } = useUpdateContent();
 
   const {
     data: contents,
@@ -61,21 +64,41 @@ export default function Dashboard() {
   } = useForm<FormData>({ mode: "onTouched" });
 
   const onSubmit = (data: FormData) => {
-    mutate(data, {
-      onSuccess: () => {
-        alert("Content created successfully!");
-        reset();
-        setIsOpen(false);
-        refetch();
-      },
-      onError: (error: any) => {
-        const errorMsg =
-          error.response?.data?.error ||
-          "Something went wrong. Please try again later.";
-
-        alert(errorMsg);
-      },
-    });
+    if (editContent) {
+      updateContent(
+        { ...data, contentId: editContent.contentId },
+        {
+          onSuccess: () => {
+            alert("Content updated successfully!");
+            reset();
+            setEditContent(null);
+            setIsOpen(false);
+            refetch();
+          },
+          onError: (error: any) => {
+            const errorMsg =
+              error.response?.data?.error ||
+              "Something went wrong while updating content.";
+            alert(errorMsg);
+          },
+        }
+      );
+    } else {
+      mutate(data, {
+        onSuccess: () => {
+          alert("Content created successfully!");
+          reset();
+          setIsOpen(false);
+          refetch();
+        },
+        onError: (error: any) => {
+          const errorMsg =
+            error.response?.data?.error ||
+            "Something went wrong. Please try again later.";
+          alert(errorMsg);
+        },
+      });
+    }
   };
 
   if (!localStorage.getItem("token")) {
@@ -115,6 +138,7 @@ export default function Dashboard() {
             contents.map((item: any) => (
               <CardComponent
                 key={item._id}
+                contentId={item._id}
                 title={item.title}
                 titleIcon={
                   item.type === "image" ? (
@@ -123,13 +147,22 @@ export default function Dashboard() {
                     <YoutubeIcon />
                   ) : item.type === "article" ? (
                     <ArticleIcon />
-                  ) : item.type === "tweet" ? (
+                  ) : item.type === "tweets" ? (
                     <XIcon />
                   ) : null
                 }
                 linkUrl={item.link}
                 linkText={item.linkText}
                 tags={item.tags}
+                onEdit={(content) => {
+                  setEditContent(content);
+                  setIsOpen(true);
+                  setValue("link", content.linkUrl);
+                  setValue("linkText", content.linkText);
+                  setValue("title", content.title);
+                  setValue("tags", content.tags);
+                  setValue("type", content.type || "image");
+                }}
               />
             ))
           ) : (
@@ -139,7 +172,7 @@ export default function Dashboard() {
       </div>
 
       <ContentModal
-        title="Enter Content Details"
+        title={editContent ? "Update Content Details" : "Enter Content Details"}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
       >
@@ -209,7 +242,7 @@ export default function Dashboard() {
             <GenericButton onClick={() => setValue("type", "article")}>
               Article
             </GenericButton>
-            <GenericButton onClick={() => setValue("type", "tweet")}>
+            <GenericButton onClick={() => setValue("type", "tweets")}>
               Tweet
             </GenericButton>
           </div>
@@ -225,8 +258,14 @@ export default function Dashboard() {
             </Alert>
           )}
 
-          <GenericButton type="submit" disabled={isPending}>
-            {isPending ? "Submitting..." : "Submit"}
+          <GenericButton type="submit" disabled={isPending || isUpdating}>
+            {isPending || isUpdating
+              ? editContent
+                ? "Updating..."
+                : "Submitting..."
+              : editContent
+              ? "Update"
+              : "Submit"}
           </GenericButton>
         </form>
       </ContentModal>

@@ -10,14 +10,7 @@ export const useUpdateContent = () => {
       title: string;
       tags: string;
     }) => {
-      const token = localStorage.getItem("token");
-
-      const { data } = await api.put("/update-content", Content, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const { data } = await api.put("/update-content", Content);
 
       return data;
     },

@@ -3,22 +3,67 @@ import { ExternalLink } from "lucide-react";
 import ShareIcon from "../Icons/ShareIcon";
 import DeleteIcon from "../Icons/deleteIcon";
 import EditIcon from "../Icons/EditIcon";
+import { useDeleteContent } from "../hooks/useDeleteContent";
+import { useQueryClient } from "@tanstack/react-query";
+import { Icon } from "./Icons";
 
 interface CardComponentProps {
+  contentId?: string;
+  share?: boolean;
   title: string;
   titleIcon: React.ReactNode;
   linkUrl: string;
   linkText: string;
   tags: string[];
+  onEdit?: (content: any) => void;
 }
 
 export function CardComponent({
+  contentId,
+  share,
   title,
   titleIcon,
   linkUrl,
   linkText,
   tags,
+  onEdit,
 }: CardComponentProps) {
+  const queryClient = useQueryClient();
+  const { mutate: deleteContent, isPending } = useDeleteContent();
+
+  const handleEdit = () => {
+    if (onEdit) {
+      onEdit({
+        contentId,
+        title,
+        linkUrl,
+        linkText,
+        tags: tags.join(","),
+      });
+    }
+  };
+
+  const handleDelete = () => {
+    if (!contentId) return alert("Missing content ID!");
+
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this content?"
+    );
+    if (!confirmDelete) return;
+
+    deleteContent(
+      { contentId },
+      {
+        onSuccess: (res) => {
+          alert(res.message || "Content Deleted successfully!");
+          queryClient.invalidateQueries({ queryKey: ["contents"] });
+        },
+        onError: (err: any) => {
+          alert(err?.response?.data?.error || "Error deleting content!");
+        },
+      }
+    );
+  };
   return (
     <div className="w-full max-w-sm border rounded-lg p-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
       {/* Header with title and action icons */}
@@ -31,15 +76,15 @@ export function CardComponent({
 
         {/* Action icons */}
         <div className="flex gap-3">
-          <span className="p-2 rounded-md bg-gray-200 hover:bg-blue-100 transition-colors cursor-pointer">
+          <Icon onClick={() => {}} disabled={isPending}>
             <ShareIcon />
-          </span>
-          <span className="p-2 rounded-md bg-gray-200 hover:bg-blue-100 transition-colors cursor-pointer">
+          </Icon>
+          <Icon onClick={handleEdit} disabled={isPending}>
             <EditIcon />
-          </span>
-          <span className="p-2 rounded-md bg-gray-200 hover:bg-red-100 transition-colors cursor-pointer">
+          </Icon>
+          <Icon onClick={handleDelete} disabled={isPending}>
             <DeleteIcon />
-          </span>
+          </Icon>
         </div>
       </div>
 
