@@ -3,6 +3,7 @@ import Signin from "../Pages/SignIn";
 import Signup from "../Pages/SignUp";
 import Dashboard from "../Pages/Dashboard";
 import ErrorPage from "../Pages/ErrorPage";
+import SharedBrain from "../Pages/Brain";
 
 export const RoutesConfig = [
   {
@@ -21,6 +22,7 @@ export const RoutesConfig = [
     path: "/dashboard",
     element: <Dashboard />,
   },
+  { path: "/brain/:hash", element: <SharedBrain /> },
   {
     path: "*",
     element: <ErrorPage />,

@@ -7,7 +7,6 @@ import GenericInput from "../Components/Input";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useContent } from "../hooks/useContent";
-import { useContents } from "../hooks/useContents";
 import { useMe } from "../hooks/useMe";
 import ImageIcon from "../Icons/ImageIcon";
 import YoutubeIcon from "../Icons/YoutubeIcon";
@@ -15,6 +14,7 @@ import XIcon from "../Icons/XIcon";
 import ArticleIcon from "../Icons/articleIcon";
 import Alert from "../Components/Alert";
 import { useUpdateContent } from "../hooks/useUpdateContent";
+import { useTypeContents } from "../hooks/useContentsType";
 
 interface FormData {
   link: string;
@@ -27,6 +27,9 @@ interface FormData {
 export default function Dashboard() {
   const [isOpen, setIsOpen] = useState(false);
   const [editContent, setEditContent] = useState<any | null>(null);
+  const [selectedType, setSelectedType] = useState<string | undefined>(
+    undefined
+  );
   const navigate = useNavigate();
   const { mutate, isPending } = useContent();
   const { mutate: updateContent, isPending: isUpdating } = useUpdateContent();
@@ -36,7 +39,7 @@ export default function Dashboard() {
     error: contentsError,
     isError: isContentsError,
     refetch,
-  } = useContents();
+  } = useTypeContents(selectedType);
   const { data: me, error: meError, isError: isMeError } = useMe();
 
   useEffect(() => {
@@ -109,16 +112,15 @@ export default function Dashboard() {
   return (
     <div className="flex">
       <div>
-        <Sidebar />
+        <Sidebar onSelectType={(type) => setSelectedType(type)} />
       </div>
 
       <div className="flex-1">
         <div className="flex justify-between items-center w-full p-9">
-          <h1 className="text-3xl font-bold">All Items</h1>
-          <div className="flex gap-6 items-center">
-            <span>
-              <b>{me}</b>
-            </span>
+          <span className="text-xs sm:text-2xl">
+            <b>{me}</b>
+          </span>
+          <div className="flex gap-4 items-center text-xs sm:text-lg">
             <GenericButton onClick={() => setIsOpen(true)}>
               Add Content
             </GenericButton>
@@ -134,10 +136,11 @@ export default function Dashboard() {
         </div>
 
         <div className="flex flex-1 flex-wrap p-9 gap-8">
-          {contents?.length ? (
+          {Array.isArray(contents) && contents.length > 0 ? (
             contents.map((item: any) => (
               <CardComponent
                 key={item._id}
+                share={false}
                 contentId={item._id}
                 title={item.title}
                 titleIcon={

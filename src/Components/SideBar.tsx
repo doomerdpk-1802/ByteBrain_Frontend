@@ -8,26 +8,30 @@ import BrainIcon from "../Icons/BrainIcon";
 import { LeftArrow } from "../Icons/leftArrow";
 import type { SidebarItemData } from "./SidebarItem";
 
-export function Sidebar() {
+interface SidebarProps {
+  onSelectType: (type?: string) => void;
+}
+
+export function Sidebar({ onSelectType }: SidebarProps) {
   const [isOpen, setIsOpen] = useState(true);
 
   const SidebarItems: SidebarItemData[] = [
     {
       icon: <ArticleIcon />,
       text: "Articles",
-      onClick: () => console.log("Articles"),
+      onClick: () => onSelectType("article"),
     },
     {
       icon: <ImageIcon />,
       text: "Images",
-      onClick: () => console.log("Images"),
+      onClick: () => onSelectType("image"),
     },
     {
       icon: <YoutubeIcon />,
       text: "Video",
-      onClick: () => console.log("Video"),
+      onClick: () => onSelectType("video"),
     },
-    { icon: <XIcon />, text: "Tweets", onClick: () => console.log("Tweets") },
+    { icon: <XIcon />, text: "Tweets", onClick: () => onSelectType("tweets") },
   ];
 
   useEffect(() => {
@@ -53,7 +57,12 @@ export function Sidebar() {
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-8">
+        <div
+          onClick={() => {
+            onSelectType(undefined);
+          }}
+          className="flex items-center justify-between p-8"
+        >
           {isOpen && <BrainIcon />}
           <button
             onClick={() => setIsOpen(!isOpen)}

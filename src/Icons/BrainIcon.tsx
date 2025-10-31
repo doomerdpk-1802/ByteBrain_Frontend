@@ -3,7 +3,7 @@ export default function BrainIcon() {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="24 0 250 90"
-      className="w-80 h-auto"
+      className="sm:w-80 w-48 h-auto"
     >
       <rect
         x="25"

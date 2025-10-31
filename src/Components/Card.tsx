@@ -6,6 +6,9 @@ import EditIcon from "../Icons/EditIcon";
 import { useDeleteContent } from "../hooks/useDeleteContent";
 import { useQueryClient } from "@tanstack/react-query";
 import { Icon } from "./Icons";
+import { useShare } from "../hooks/useShare";
+import UnShareIcon from "../Icons/unShareIcon";
+import { useState } from "react";
 
 interface CardComponentProps {
   contentId?: string;
@@ -29,7 +32,34 @@ export function CardComponent({
   onEdit,
 }: CardComponentProps) {
   const queryClient = useQueryClient();
+
+  const [isShared, setIsShared] = useState(share ?? false);
   const { mutate: deleteContent, isPending } = useDeleteContent();
+  const { mutate: shareContent, isPending: isPendingShare } = useShare();
+
+  const handleShare = () => {
+    if (!contentId) return alert("Missing content ID!");
+
+    shareContent(
+      { contentId, share: !isShared },
+      {
+        onSuccess: (res) => {
+          if (res.hash) {
+            const link = `${window.location.origin}/brain/${res.hash}`;
+            navigator.clipboard.writeText(link);
+            alert(`Link copied!\n${link}`);
+          } else {
+            alert("Content unshared successfully!");
+          }
+          setIsShared(!isShared);
+          queryClient.invalidateQueries({ queryKey: ["contents"] });
+        },
+        onError: (err: any) => {
+          alert(err?.response?.data?.error || "Error sharing content!");
+        },
+      }
+    );
+  };
 
   const handleEdit = () => {
     if (onEdit) {
@@ -76,9 +106,10 @@ export function CardComponent({
 
         {/* Action icons */}
         <div className="flex gap-3">
-          <Icon onClick={() => {}} disabled={isPending}>
-            <ShareIcon />
+          <Icon onClick={handleShare} disabled={isPendingShare}>
+            {isShared ? <UnShareIcon /> : <ShareIcon />}
           </Icon>
+
           <Icon onClick={handleEdit} disabled={isPending}>
             <EditIcon />
           </Icon>
