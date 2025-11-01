@@ -50,17 +50,6 @@ export default function SharedBrain() {
             <ExternalLink size={16} />
           </a>
         </div>
-
-        <div className="flex flex-wrap gap-2 justify-center">
-          {item.tags?.map((tag: string) => (
-            <span
-              key={tag}
-              className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full hover:bg-blue-100 hover:text-blue-800 transition-colors"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
       </div>
     </div>
   );
