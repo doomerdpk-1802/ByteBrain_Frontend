@@ -27,7 +27,6 @@ export default function Login() {
       onError: (error: any) => {
         const errorMsg =
           error.response?.data?.error ||
-          error.response?.data?.message ||
           "Something went wrong. Please try again later.";
 
         alert(errorMsg);

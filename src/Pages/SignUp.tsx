@@ -32,7 +32,6 @@ export default function Signup() {
       onError: (error: any) => {
         const errorMsg =
           error.response?.data?.error ||
-          error.response?.data?.message ||
           "Something went wrong. Please try again later.";
 
         alert(errorMsg);
@@ -74,7 +73,7 @@ export default function Signup() {
           label="Email"
           placeholder="Provide your email..."
           register={register("email", {
-            required: "Email is required!",
+            required: "Email in correct format is required!",
             pattern: {
               value: /^\S+@\S+$/i,
               message: "Invalid email format",

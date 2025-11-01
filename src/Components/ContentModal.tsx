@@ -18,7 +18,6 @@ export default function ContentModal({
   return (
     <div className="fixed h-screen inset-0 bg-white/50 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-white rounded-lg w-11/12 max-w-md shadow-lg relative border border-gray-200">
-        {/* Header */}
         <div className="flex justify-between items-center p-4 ">
           <h2 className="text-lg font-semibold">{title}</h2>
           <button
@@ -30,7 +29,6 @@ export default function ContentModal({
           </button>
         </div>
 
-        {/* Content */}
         <div className="p-4 flex flex-col items-center gap-2">{children}</div>
       </div>
     </div>

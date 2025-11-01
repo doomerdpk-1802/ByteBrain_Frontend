@@ -10,7 +10,8 @@ api.interceptors.request.use((config) => {
   if (
     token &&
     !config.url?.includes("/login") &&
-    !config.url?.includes("/signup")
+    !config.url?.includes("/signup") &&
+    !config.url?.includes("/brain/:hash")
   ) {
     config.headers.Authorization = `Bearer ${token}`;
   }

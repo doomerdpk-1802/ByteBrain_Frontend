@@ -50,13 +50,11 @@ export function Sidebar({ onSelectType }: SidebarProps) {
 
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* Sidebar */}
       <div
         className={`bg-white border-r border-gray-200 transition-all duration-300 ease-in-out ${
           isOpen ? "w-64" : "w-20"
         }`}
       >
-        {/* Header */}
         <div
           onClick={() => {
             onSelectType(undefined);
@@ -73,7 +71,6 @@ export function Sidebar({ onSelectType }: SidebarProps) {
           </button>
         </div>
 
-        {/* Sidebar items */}
         <div>
           <nav className="p-5 space-y-2">
             {SidebarItems.map((item, index) => (

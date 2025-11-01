@@ -96,15 +96,12 @@ export function CardComponent({
   };
   return (
     <div className="w-full max-w-sm border rounded-lg p-4 shadow-lg hover:shadow-xl transition-shadow duration-300">
-      {/* Header with title and action icons */}
       <div className="flex justify-between gap-4 mb-6">
-        {/* Title with icon */}
         <div className="flex items-center gap-3">
           <div className="text-blue-600 text-xl">{titleIcon}</div>
           <h3 className="text-gray-900 text-lg font-semibold">{title}</h3>
         </div>
 
-        {/* Action icons */}
         <div className="flex gap-3">
           <Icon onClick={handleShare} disabled={isPendingShare}>
             {isShared ? <UnShareIcon /> : <ShareIcon />}
@@ -119,7 +116,6 @@ export function CardComponent({
         </div>
       </div>
 
-      {/* Link embedding */}
       <div className="mb-6 pb-10 pt-6 flex justify-center">
         <a
           href={linkUrl}
@@ -132,7 +128,6 @@ export function CardComponent({
         </a>
       </div>
 
-      {/* Tags */}
       <div className="flex flex-wrap gap-2 justify-center">
         {tags.map((tag, index) => (
           <span
