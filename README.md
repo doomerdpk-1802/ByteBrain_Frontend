@@ -1,73 +1,74 @@
-# React + TypeScript + Vite
+# ByteBrain Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+ByteBrain Frontend is a modern web application built using React, designed to serve as the UI for the ByteBrain platform. It leverages advanced React libraries and tools to provide a performant, user-friendly experience.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Modern UI with React**: The application is built entirely in React, ensuring fast rendering and responsive user interactions.
+- **Data Fetching with React Query**: Efficient state management and API communication using React Query, making server state synchronization seamless.
+- **Forms with React Hook Form**: Easy and flexible form management using React Hook forms, including validation and error handling.
+- **Component-based Architecture**: Clean separation of concerns via reusable components.
 
-## React Compiler
+## Getting Started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Prerequisites
 
-## Expanding the ESLint configuration
+- [Node.js](https://nodejs.org/) (Recommended v18+)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Installation
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/doomerdpk-1802/ByteBrain_Frontend.git
+   cd ByteBrain_Frontend
+   ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+2. **Install dependencies**:
+   ```bash
+   npm install
+   # OR
+   yarn install
+   ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+3. **Configure environment variables**  
+   Create a `.env` file in the root of your project. Example:
+   ```
+   REACT_APP_API_URL=http://localhost:5173/
+   ```
+
+4. **Start development server**:
+   ```bash
+   npm run dev
+   ```
+   The app will run at [http://localhost:5173
+
+## Usage
+
+- Standard React development setup.
+- All forms handled via React Hook Form for validation.
+- Data fetching and cache is managed by React Query.
+
+## Project Structure (default example)
+
+```
+ByteBrain_Frontend/
+├── public/
+├── src/
+│   ├── api/         # API calls via React Query
+│   ├── components/  # Reusable React components
+│   ├── hooks/       # Custom React hooks
+│   ├── pages/       # Page level components
+│   ├── forms/       # Form components using React Hook Form
+│   ├── App.js
+│   └── index.js
+├── .env
+├── package.json
+└── README.md
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Technologies Used
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- **React**
+- **React Query**
+- **React Hook Form**
